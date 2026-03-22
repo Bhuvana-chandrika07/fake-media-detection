@@ -1,0 +1,46 @@
+# compiled output
+dist/
+tmp/
+out-tsc/
+*.tsbuildinfo
+
+# dependencies
+node_modules/
+
+# environment variables
+.env
+
+# uploads (user data)
+uploads/
+
+# python cache
+__pycache__/
+*.pyc
+
+# ML models (if any)
+*.h5
+*.pt
+*.pth
+
+# IDEs and editors
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+.idea/
+*.sublime-workspace
+
+# logs
+*.log
+npm-debug.log
+yarn-error.log
+
+# system files
+.DS_Store
+Thumbs.db
+
+# Replit
+.cache/
+.local/

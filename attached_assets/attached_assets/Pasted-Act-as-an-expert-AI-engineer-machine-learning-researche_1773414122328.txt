@@ -1,0 +1,104 @@
+Act as an expert AI engineer, machine learning researcher, and full-stack developer. Generate a complete working project inside Replit for an **AI Fake Media Detection Platform** that detects deepfake images, videos, and audio using machine learning models trained on Kaggle datasets. The project must include frontend UI, backend API, machine learning training pipeline, dataset downloading from Kaggle, model inference, and deployment instructions.
+
+The system should allow users to upload images, videos, and audio files and determine whether the media is real or fake. The interface must display prediction results, confidence scores, explanations, and visualizations.
+
+Use the following technology stack:
+
+Frontend:
+React, TailwindCSS, JavaScript, HTML, CSS, Chart.js for analytics, Framer Motion for animations.
+
+Backend:
+Python with Flask API.
+
+Machine Learning:
+PyTorch or TensorFlow, OpenCV for image/video processing, Librosa for audio analysis, NumPy, Pandas, and Scikit-learn.
+
+Database:
+SQLite for storing users and scan history.
+
+Deployment:
+Ensure the project runs smoothly inside Replit with a single run command.
+
+Build a high-end modern user interface with a dark/light theme toggle, animated gradients, glassmorphism cards, responsive layout, and smooth transitions. Create these pages:
+
+1. Landing Page with hero section, platform explanation, features, and an upload call-to-action.
+2. Authentication pages for login and signup.
+3. User Dashboard displaying upload panel, scan history, analytics charts, and statistics.
+4. Media Upload Page with drag-and-drop upload, preview, and progress bar.
+5. Detection Results Page showing media preview, prediction result (Real or Fake), confidence score, and AI explanation.
+6. History Page showing previous scans and results.
+
+Create three AI detection systems:
+
+Image Deepfake Detection:
+Train CNN models such as EfficientNet or ResNet using Kaggle datasets like the DeepFake Detection Challenge dataset, CelebDF dataset, and real-and-fake face detection dataset. The pipeline should load images, perform face detection, resize images, apply data augmentation, and train a CNN classifier that outputs fake probability.
+
+Video Deepfake Detection:
+Extract frames using OpenCV, detect faces, process frames using a CNN model, and analyze temporal patterns using LSTM to classify videos as real or fake.
+
+Audio Deepfake Detection:
+Convert audio to spectrograms using Librosa and train a CNN classifier to detect synthetic voices using datasets like FakeAVCeleb or ASVspoof.
+
+Automatically download datasets from Kaggle using the Kaggle API. Install the Kaggle package and include commands to download datasets, extract files, and preprocess them.
+
+Example dataset download command:
+kaggle datasets download -d ciplab/real-and-fake-face-detection
+
+Create preprocessing scripts that resize images, extract faces, convert audio into spectrograms, and extract frames from videos.
+
+Generate ML training scripts including:
+dataset_loader.py
+preprocessing.py
+train_image_model.py
+train_video_model.py
+train_audio_model.py
+
+Train models using batch training, validation splits, and evaluation metrics such as accuracy, precision, recall, and F1 score. Save trained models inside a models directory.
+
+Create Flask backend API endpoints:
+
+POST /upload
+POST /detect/image
+POST /detect/video
+POST /detect/audio
+GET /history
+
+The backend should save uploaded files, run model inference, return predictions, and store scan results in the database.
+
+Example JSON response:
+{
+"prediction": "Fake",
+"confidence": 0.92,
+"explanation": "Facial texture inconsistencies detected"
+}
+
+Add explainable AI using Grad-CAM to generate heatmaps highlighting fake regions in images and video frames.
+
+Include real-time webcam detection using OpenCV so users can test live deepfake detection.
+
+Generate the full folder structure:
+
+fake-media-detector/
+frontend/
+backend/
+ml/
+datasets/
+models/
+uploads/
+notebooks/
+requirements.txt
+
+Generate a requirements.txt file including flask, torch, tensorflow, opencv-python, numpy, pandas, scikit-learn, librosa, matplotlib, kaggle, and other necessary dependencies.
+
+Include step-by-step instructions to run the project inside Replit:
+
+1. Install dependencies
+2. Configure Kaggle API
+3. Download datasets
+4. Train models
+5. Run the backend server
+6. Launch the frontend interface
+
+Ensure all code files are generated and the project runs end-to-end inside Replit.
+
+Design the interface to resemble a modern AI dashboard similar to advanced AI platforms built by OpenAI with smooth animations and professional styling.

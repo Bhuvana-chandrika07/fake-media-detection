@@ -1,0 +1,17 @@
+packages:
+  "framer-motion": "For smooth page transitions and animated UI elements"
+  "chart.js": "Required for dashboard analytics charts"
+  "react-chartjs-2": "React wrapper for Chart.js"
+  "react-dropzone": "For drag-and-drop file upload zone"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility for merging tailwind classes without style conflicts"
+  "date-fns": "For formatting dates in history and dashboard"
+
+images:
+  - path: "artifacts/deepfake-detector/public/images/cyber-bg.png"
+    description: "Abstract cyberpunk background with deep navy and electric blue gradient mesh, subtle tech grid overlay, dark and professional"
+    aspect_ratio: "16:9"
+
+notes:
+  - Using generated API hooks directly from @workspace/api-client-react
+  - Simulating dark mode professional cyberpunk theme natively without forcing 'dark' class on root, assuming default styling is dark.

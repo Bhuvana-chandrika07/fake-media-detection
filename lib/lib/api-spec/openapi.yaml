@@ -1,0 +1,363 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: AI Fake Media Detection Platform API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: detection
+    description: Media detection operations
+  - name: history
+    description: Scan history operations
+  - name: auth
+    description: Authentication operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /detect/image:
+    post:
+      operationId: detectImage
+      tags: [detection]
+      summary: Detect deepfake in image
+      description: Analyzes an uploaded image for deepfake manipulation
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                userId:
+                  type: string
+              required: [file]
+      responses:
+        "200":
+          description: Detection result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetectionResult"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /detect/video:
+    post:
+      operationId: detectVideo
+      tags: [detection]
+      summary: Detect deepfake in video
+      description: Analyzes an uploaded video for deepfake manipulation
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                userId:
+                  type: string
+              required: [file]
+      responses:
+        "200":
+          description: Detection result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetectionResult"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /detect/audio:
+    post:
+      operationId: detectAudio
+      tags: [detection]
+      summary: Detect deepfake in audio
+      description: Analyzes an uploaded audio file for AI-generated synthetic voices
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                userId:
+                  type: string
+              required: [file]
+      responses:
+        "200":
+          description: Detection result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetectionResult"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /history:
+    get:
+      operationId: getHistory
+      tags: [history]
+      summary: Get scan history
+      description: Returns list of previous scan results
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+        - in: query
+          name: mediaType
+          schema:
+            type: string
+            enum: [image, video, audio]
+      responses:
+        "200":
+          description: Scan history
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HistoryResponse"
+
+  /history/{id}:
+    get:
+      operationId: getScanById
+      tags: [history]
+      summary: Get scan by ID
+      description: Returns a specific scan result
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Scan result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScanRecord"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /stats:
+    get:
+      operationId: getStats
+      tags: [history]
+      summary: Get platform statistics
+      description: Returns aggregate detection statistics
+      responses:
+        "200":
+          description: Platform statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlatformStats"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    DetectionResult:
+      type: object
+      properties:
+        id:
+          type: integer
+        prediction:
+          type: string
+          enum: [Real, Fake]
+        confidence:
+          type: number
+          format: float
+        explanation:
+          type: string
+        mediaType:
+          type: string
+          enum: [image, video, audio]
+        filename:
+          type: string
+        fileSize:
+          type: integer
+        analysisDetails:
+          $ref: "#/components/schemas/AnalysisDetails"
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - prediction
+        - confidence
+        - explanation
+        - mediaType
+        - filename
+        - analysisDetails
+        - createdAt
+
+    AnalysisDetails:
+      type: object
+      properties:
+        facialInconsistency:
+          type: number
+        compressionArtifacts:
+          type: number
+        frequencyAnomaly:
+          type: number
+        temporalConsistency:
+          type: number
+        noisePattern:
+          type: number
+        spectralAnomaly:
+          type: number
+        voicePitch:
+          type: number
+        processingTime:
+          type: number
+      required:
+        - processingTime
+
+    ScanRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+        prediction:
+          type: string
+          enum: [Real, Fake]
+        confidence:
+          type: number
+        explanation:
+          type: string
+        mediaType:
+          type: string
+          enum: [image, video, audio]
+        filename:
+          type: string
+        fileSize:
+          type: integer
+        analysisDetails:
+          $ref: "#/components/schemas/AnalysisDetails"
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - prediction
+        - confidence
+        - explanation
+        - mediaType
+        - filename
+        - createdAt
+
+    HistoryResponse:
+      type: object
+      properties:
+        scans:
+          type: array
+          items:
+            $ref: "#/components/schemas/ScanRecord"
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+      required:
+        - scans
+        - total
+        - limit
+        - offset
+
+    PlatformStats:
+      type: object
+      properties:
+        totalScans:
+          type: integer
+        fakeDetected:
+          type: integer
+        realDetected:
+          type: integer
+        imageScans:
+          type: integer
+        videoScans:
+          type: integer
+        audioScans:
+          type: integer
+        accuracyRate:
+          type: number
+        avgProcessingTime:
+          type: number
+      required:
+        - totalScans
+        - fakeDetected
+        - realDetected
+        - imageScans
+        - videoScans
+        - audioScans
+        - accuracyRate
+        - avgProcessingTime
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+      required:
+        - error
+        - message

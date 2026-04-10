@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Layout } from "@/components/layout";
 import { useGetHistory } from "../api-client-react";
 import { format } from "date-fns";
@@ -7,14 +7,19 @@ import { formatPercentage } from "@/lib/utils";
 import { Image as ImageIcon, Video, AudioLines, ChevronRight, Filter } from "lucide-react";
 import { motion } from "framer-motion";
 
+type MediaType = "image" | "video" | "audio";
+
 export default function History() {
-  const [filter, setFilter] = useState<GetHistoryMediaType | "all">("all");
+  const [filter, setFilter] = useState<MediaType | "all">("all");
+  const [, setLocation] = useLocation();
   
   // Since we don't have true pagination state hooked up to UI yet, we'll just fetch recent 50
-  const { data, isLoading } = useGetHistory({ 
+  const { data, isLoading, error } = useGetHistory({ 
     limit: 50, 
     mediaType: filter !== "all" ? filter : undefined 
   });
+
+  console.log("History data:", data, "Loading:", isLoading, "Error:", error);
 
   const getMediaIcon = (type: string) => {
     if (type === 'image') return <ImageIcon className="w-4 h-4 text-blue-400" />;
@@ -35,7 +40,7 @@ export default function History() {
             <Filter className="w-4 h-4 text-muted-foreground ml-2" />
             <select 
               value={filter}
-              onChange={(e) => setFilter(e.target.value as GetHistoryMediaType | "all")}
+              onChange={(e) => setFilter(e.target.value as MediaType | "all")}
               className="bg-transparent border-none text-sm text-foreground focus:ring-0 cursor-pointer p-2"
             >
               <option value="all">All Media Types</option>
@@ -60,20 +65,26 @@ export default function History() {
                 </tr>
               </thead>
               <tbody>
-                {isLoading ? (
+                {error ? (
+                  <tr>
+                    <td colSpan={6} className="px-6 py-12 text-center text-destructive">
+                      Error loading history: {error.message}
+                    </td>
+                  </tr>
+                ) : isLoading ? (
                   <tr>
                     <td colSpan={6} className="px-6 py-12 text-center">
                       <div className="inline-block w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
                     </td>
                   </tr>
-                ) : data?.scans.length === 0 ? (
+                ) : !data || !Array.isArray(data.scans) || data.scans.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="px-6 py-12 text-center text-muted-foreground">
                       No scans found matching your criteria.
                     </td>
                   </tr>
                 ) : (
-                  data?.scans.map((scan, i) => {
+                  data.scans.map((scan, i) => {
                     const isFake = scan.prediction === "Fake";
                     return (
                       <motion.tr 
@@ -82,7 +93,7 @@ export default function History() {
                         transition={{ delay: i * 0.05 }}
                         key={scan.id} 
                         className="border-b border-white/5 hover:bg-white/5 transition-colors group cursor-pointer"
-                        onClick={() => window.location.href = `/results/${scan.id}`}
+                        onClick={() => setLocation(`/results/${scan.id}`)}
                       >
                         <td className="px-6 py-4 font-medium truncate max-w-[200px]" title={scan.filename}>
                           {scan.filename}

@@ -6,13 +6,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Settings as SettingsIcon, Bell, Shield, Palette, Globe } from "lucide-react";
+import { Settings as SettingsIcon, Bell, Shield, Palette, Globe, Mail, Info, AlertCircle, Phone } from "lucide-react";
+import { EmergencyReportModal } from "@/components/emergency-report-modal";
 
 export default function Settings() {
   const [notifications, setNotifications] = useState(true);
   const [autoAnalysis, setAutoAnalysis] = useState(false);
   const [theme, setTheme] = useState("dark");
   const [language, setLanguage] = useState("en");
+  const [showEmergencyReport, setShowEmergencyReport] = useState(false);
 
   return (
     <Layout>
@@ -159,8 +161,114 @@ export default function Settings() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Contact Us */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Mail className="w-5 h-5" />
+                Contact Us
+              </CardTitle>
+              <CardDescription>
+                Get in touch with our support team.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-3">
+                <div>
+                  <p className="font-medium text-sm">Email</p>
+                  <p className="text-sm text-muted-foreground">support@deepfakedetector.com</p>
+                </div>
+                <Separator />
+                <div>
+                  <p className="font-medium text-sm">Live Chat</p>
+                  <p className="text-sm text-muted-foreground">Available Monday-Friday, 9 AM - 5 PM EST</p>
+                </div>
+                <Separator />
+                <div>
+                  <p className="font-medium text-sm">Response Time</p>
+                  <p className="text-sm text-muted-foreground">We typically respond within 24 hours</p>
+                </div>
+              </div>
+              <Button className="w-full" variant="outline">Send Message</Button>
+            </CardContent>
+          </Card>
+
+          {/* About Us */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Info className="w-5 h-5" />
+                About Us
+              </CardTitle>
+              <CardDescription>
+                Learn more about our mission and vision.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-3 text-sm">
+                <p>
+                  <span className="font-medium">DeepFake Detector</span> is an advanced AI-powered platform designed to identify and analyze manipulated media content with high accuracy.
+                </p>
+                <p>
+                  Our mission is to combat misinformation by providing individuals and organizations with reliable tools to detect deepfakes and synthetic media.
+                </p>
+                <p className="text-muted-foreground">
+                  Version 2.0 | [c] 2026 DeepFake Detector. All rights reserved.
+                </p>
+              </div>
+              <Button className="w-full" variant="outline">Visit Website</Button>
+            </CardContent>
+          </Card>
+
+          {/* Emergency Contacts */}
+          <Card className="border-destructive/50 bg-destructive/5">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-destructive">
+                <AlertCircle className="w-5 h-5" />
+                Emergency Contacts
+              </CardTitle>
+              <CardDescription>
+                Critical support and escalation contacts.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-3">
+                <div>
+                  <p className="font-medium text-sm flex items-center gap-2">
+                    <Phone className="w-4 h-4" />
+                    Security Incident Hotline
+                  </p>
+                  <p className="text-sm text-muted-foreground">+1 (800) 555-0123</p>
+                  <p className="text-xs text-muted-foreground">24/7 Emergency Support</p>
+                </div>
+                <Separator />
+                <div>
+                  <p className="font-medium text-sm">Abuse Report</p>
+                  <p className="text-sm text-muted-foreground">abuse@deepfakedetector.com</p>
+                </div>
+                <Separator />
+                <div>
+                  <p className="font-medium text-sm">Technical Support</p>
+                  <p className="text-sm text-muted-foreground">technical@deepfakedetector.com</p>
+                </div>
+              </div>
+              <Button 
+                className="w-full" 
+                variant="destructive"
+                onClick={() => setShowEmergencyReport(true)}
+              >
+                Report Emergency
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </div>
+
+      <EmergencyReportModal 
+        isOpen={showEmergencyReport} 
+        onClose={() => setShowEmergencyReport(false)} 
+      />
     </Layout>
   );
 }
